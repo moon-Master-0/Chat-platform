@@ -15,26 +15,10 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.get('/dashboard', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dashboard.html'));
-});
-
-app.get('/chat', (req, res) => {
-  res.sendFile(path.join(__dirname, 'chat.html'));
-});
-
-app.get('/all', (req, res) => {
-  res.sendFile(path.join(__dirname, 'all.html'));
-});
-
-app.get('/about', (req, res) => {
-  res.sendFile(path.join(__dirname, 'about.html'));
-});
-
 app.post('/upload', upload.single('media'), (req, res) => {
   if (req.file) {
     const post = {
-      id: Date.now(),
+      id: Date.now(), // unique identifier for the post
       title: req.body.title,
       url: `/uploads/${req.file.filename}`,
       type: req.file.mimetype.split('/')[0],
@@ -123,7 +107,6 @@ const io = socketio(server);
 io.on('connection', function(socket) {
   console.log('Connected to ' + socket.id);
 
-  // Send the chat history to the client
   fs.readFile('text.txt', 'utf8', (err, data) => {
     if (err) {
       console.error(err);
